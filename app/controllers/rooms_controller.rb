@@ -165,6 +165,10 @@ class RoomsController < ApplicationController
     opts[:mute_on_start] = room_setting_with_config("muteOnStart")
     opts[:require_moderator_approval] = room_setting_with_config("requireModeratorApproval")
 
+    # Hack allow and start recording for rooms with names ending in _recording
+    opts[:meeting_recorded] = @room.name.end_with?("_recording") ? true : false
+
+
     begin
       redirect_to join_path(@room, current_user.name, opts, current_user.uid)
     rescue BigBlueButton::BigBlueButtonException => e
